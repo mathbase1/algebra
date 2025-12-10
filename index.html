@@ -1,0 +1,1645 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>GCSE Maths – Algebra (AQA/Edexcel/Eduqas) Foundation – Non‑Calculator (10Q / 49 marks)</title>
+<style>
+  :root{
+    --ink:#1f2937; --muted:#6b7280; --accent:#2563eb; --bg:#ffffff; --panel:#f8fafc;
+    --success:#0a7d45; --error:#b91c1c; --border:#e5e7eb; --tabh:56px;
+    --exp-left: 2px;
+    --redbg:#fee2e2; --redfg:#991b1b; --orbg:#ffedd5; --orfg:#9a3412; --grbg:#dcfce7; --grfg:#065f46;
+  }
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
+    font:18px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;}
+  header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--border);}
+  .bar{display:flex;gap:.5rem;align-items:center;overflow:auto hidden;white-space:nowrap;height:var(--tabh);padding:.5rem .75rem;}
+  .bar button, .draw-tools button{
+    appearance:none;border:1px solid var(--border);background:#fff;color:#111827;
+    border-radius:999px;padding:.45rem 1rem;cursor:pointer;font-weight:700;transition:.15s;flex:0 0 auto;
+  }
+  .bar button:hover, .draw-tools button:hover{border-color:#c7d2fe}
+  .bar button.active, .draw-tools button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .logo-inline{height:40px;width:40px;border-radius:8px;object-fit:cover;flex:0 0 auto;margin-right:.4rem}
+  .nocalc{height:32px;width:32px;object-fit:contain;vertical-align:middle}
+  main{max-width:980px;margin:1rem auto;padding:0 1rem 5rem}
+  section.page{display:none;animation:fade .15s ease-out}
+  section.page.active{display:block}
+  @keyframes fade{from{opacity:.45;transform:translateY(-2px)}to{opacity:1;transform:none}}
+  h2{font-size:1.35rem;margin:1.2rem 0 .45rem}
+  h3{font-size:1.15rem;margin:.9rem 0 .35rem}
+  .grid{display:grid;gap:1rem}
+  .grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  table{border-collapse:collapse;width:100%}
+  th,td{border:1px solid var(--border);padding:.65rem .7rem;text-align:left;vertical-align:middle}
+  th{background:#f3f4f6}
+  .flex{display:flex;align-items:center;gap:.7rem;flex-wrap:wrap}
+  .align-right{display:flex;justify-content:flex-end}
+  .qpanel{border:1px solid var(--border);border-radius:.7rem;overflow:hidden;margin:1.4rem 0 2.0rem}
+  .qhead{padding:1rem 1.1rem;border-bottom:1px solid var(--border);background:#fbfdff}
+  .qbody{padding:1.1rem 1.1rem}
+  .qbody p{margin:1.0rem 0 1.15rem}
+  .marktag{color:var(--muted)}
+  .muted{color:var(--muted)}
+  .score{font-weight:800;margin-left:.5rem}
+  .result.ok{color:var(--success)} .result.no{color:var(--error)}
+  .badge{display:inline-block;background:#eef2ff;color:#1e3a8a;border:1px solid #c7d2fe;padding:.1rem .45rem;border-radius:.45rem;font-size:.85em;margin-left:.35rem}
+  /* fraction inputs (for any MathML tasks if needed) */
+  .frac{--w:64px; --bar:2px; display:inline-grid; grid-template-rows: 1fr var(--bar) 1fr;
+    align-items:stretch; justify-items:stretch; margin:0 .25rem; vertical-align:middle;}
+  .frac input{width:var(--w); height:32px; text-align:center; border:1px solid var(--border);
+    border-radius:.35rem; padding:.15rem .2rem; box-sizing:border-box;}
+  .frac .bar{width:75%; height:0; border-top:2px solid #111; margin:0; justify-self:start}
+  /* small symbol toolbar */
+  .symbar{display:inline-flex;gap:.25rem;margin-left:.5rem;vertical-align:middle}
+  .symbar button{appearance:none;border:1px solid var(--border);background:#fff;color:#111827;border-radius:.35rem;padding:.15rem .4rem;cursor:pointer;font-weight:700}
+  .symbar button:hover{border-color:#c7d2fe}
+  /* modal */
+  .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.4);z-index:1000}
+  .modal .panel{width:min(620px,92vw);background:#fff;border:1px solid var(--border);border-radius:.7rem;padding:1rem 1.1rem}
+  .modal .panel h3{margin:.2rem 0 .6rem}
+  .modal .panel .row{display:flex;gap:.5rem;align-items:center;margin-top:.6rem;flex-wrap:wrap}
+  .modal input{flex:1;padding:.55rem;border:1px solid var(--border);border-radius:.4rem}
+  /* breakdown colour */
+  .markcell{font-weight:800}
+  .mark-red{background:var(--redbg);color:var(--redfg)}
+  .mark-orange{background:var(--orbg);color:var(--orfg)}
+  .mark-green{background:var(--grbg);color:var(--grfg)}
+  /* ticks / crosses */
+  .pm{display:none;margin-left:.4rem;font-weight:900}
+  .pm.ok{color:#0a7d45}
+  .pm.no{color:#b91c1c}
+  .actions .btn{
+    appearance:none;border:1px solid var(--border);background:var(--accent);color:#fff;
+    border-radius:999px;padding:.45rem 1rem;cursor:pointer;font-weight:700;display:inline-block;
+    text-decoration:none;
+  }
+  /* ====== Optional dark class ====== */
+  body.dark{
+    --bg:#000; --ink:#ffffff; --muted:#cbd5e1; --panel:#000; --border:#333333;
+    background:#000; color:#fff;
+  }
+  body.dark header{background:#000;border-bottom-color:#333;}
+  body.dark .bar button, body.dark .draw-tools button{background:#000;color:#e5e7eb;border-color:#374151;}
+  body.dark .bar button:hover, body.dark .draw-tools button:hover{border-color:#3b82f6;}
+  body.dark .bar button.active, body.dark .draw-tools button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  body.dark .qpanel{background:#000;color:#ffffff;border-color:#333;}
+  body.dark .qhead{background:#000;border-bottom-color:#333;color:#ffffff;}
+  body.dark .qbody{background:#000;color:#ffffff;}
+  body.dark .marktag{color:#cbd5e1;}
+  body.dark .frac .bar{border-top-color:#cbd5e1;}
+  body.dark table{color:#e5e7eb;}
+  body.dark th, body.dark td{background:#000;border-color:#333;}
+  body.dark .modal{background:rgba(0,0,0,.7);}
+  body.dark .modal .panel{background:#000;border-color:#333;color:#ffffff;}
+  body.dark input, body.dark select, body.dark textarea{background:#000; color:#ffffff; border-color:#444;}
+  /* ====== Right-side drawing tools ====== */
+  .draw-tools{
+    position:fixed; top:calc(var(--tabh) + 8px); right:8px;
+    display:flex; flex-direction:column; gap:.5rem; z-index:1201;
+  }
+  /* ====== Full-page ink canvas overlay ====== */
+  #inkCanvas{
+    position:absolute; left:0;
+    z-index:1150;
+    pointer-events:none;
+  }
+  #inkCanvas.active{ pointer-events:auto; touch-action:none; }
+  /* ====== Cursor icons for pen / eraser (dark blue pen with brighter, larger yellow glow) ====== */
+  /* PEN — hotspot at the nib at the other end (5,36), brighter/larger halo */
+  body.pen-active{
+    cursor: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>\
+  <circle cx='20' cy='20' r='19.5' fill='%23fff84a' fill-opacity='0.9'/>\
+  <path d='M5 36 L9 23 L26 6 L35 15 L18 32 Z' fill='%231e3a8a' stroke='%23000000' stroke-width='1.2'/>\
+  <circle cx='29' cy='13' r='1.8' fill='%23000000'/>\
+</svg>") 5 36, crosshair;
+  }
+  body.eraser-active{
+    cursor: url("data:image/svg+xml;utf8,\
+<svg xmlns='http://www.w3.org/2000/svg' width='34' height='34' viewBox='0 0 34 34'>\
+  <circle cx='17' cy='17' r='16' fill='%23fff96b' fill-opacity='0.6'/>\
+  <rect x='6' y='10' width='22' height='12' rx='3' fill='%23ffffff' stroke='%23000000' stroke-width='1.2'/>\
+</svg>") 6 20, crosshair;
+  }
+  .svgwrap{margin-top:.75rem; border:1px solid var(--border); border-radius:.5rem; padding:.5rem; background:#fff;}
+  .numline-label{font-size:12px; fill:#334155; user-select:none}
+  .axis-label{font-size:10px; fill:#000000; user-select:none}
+  .drag-handle{cursor:grab}
+  .drag-handle:active{cursor:grabbing}
+  #q10svg{touch-action:none; overflow:visible}
+  #q7svg{touch-action:none}
+</style>
+</head>
+<body>
+<header>
+  <div class="bar" id="tabbar" role="tablist" aria-label="Quick navigation">
+    <img class="logo-inline" alt="PEM Tutoring logo" src="https://yt3.googleusercontent.com/ytc/AIdro_kWtwFEXx_uNCYb1oOX786ji6m05CpBRtqF1CLQu8o7lA=s160-c-k-c0x00ffffff-no-rj">
+    <button class="active" data-target="q1" role="tab" aria-selected="true">Q1</button><button data-target="q2" role="tab">Q2</button><button data-target="q3" role="tab">Q3</button>
+    <button data-target="q4" role="tab">Q4</button><button data-target="q5" role="tab">Q5</button><button data-target="q6" role="tab">Q6</button>
+    <button data-target="q7" role="tab">Q7</button><button data-target="q8" role="tab">Q8</button><button data-target="q9" role="tab">Q9</button>
+    <button data-target="q10" role="tab">Q10</button><button data-target="results" role="tab">Results</button>
+  </div>
+</header>
+<!-- Full-page drawing layer -->
+<canvas id="inkCanvas" aria-hidden="true"></canvas>
+<main>
+  <!-- =================== QUESTIONS =================== -->
+  <!-- Q1 SIMPLIFY (COLLECT TERMS; WITH BRACKETS) -->
+  <section id="q1" class="page active" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q1. Simplifying expressions (collect like terms; with brackets) <span class="marktag">[4 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q1res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p><b>(a)</b> Simplify: <b id="q1a_text"></b><br>
+          Answer: <input id="q1a_ans" size="28" autocomplete="off">
+          <span class="pm" id="q1a_pm"></span>
+        </p>
+        <p><b>(b)</b> Simplify: <b id="q1b_text"></b><br>
+          Answer: <input id="q1b_ans" size="28" autocomplete="off">
+          <span class="pm" id="q1b_pm"></span>
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- Q2 LAWS OF INDICES -->
+  <section id="q2" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q2. Laws of indices (incl. negative/zero) — evaluate integers <span class="marktag">[4 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q2res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p><b>(a)</b> Evaluate: <b id="q2a_text"></b> → <input id="q2a" size="8"><span class="pm" id="q2a_pm"></span></p>
+        <p><b>(b)</b> Evaluate: <b id="q2b_text"></b> → <input id="q2b" size="8"><span class="pm" id="q2b_pm"></span></p>
+      </div>
+    </div>
+  </section>
+  <!-- Q3 EXPAND / FACTORISE SINGLE BRACKETS -->
+  <section id="q3" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q3. Expanding and factorising single brackets <span class="marktag">[6 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q3res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p><b>(a)</b> Expand: <b id="q3a_text"></b><br>
+          Answer: <input id="q3a_ans" size="26" autocomplete="off">
+          <span class="pm" id="q3a_pm"></span>
+        </p>
+        <p><b>(b)</b> Factorise: <b id="q3b_text"></b><br>
+          Answer: <input id="q3b_ans" size="26" autocomplete="off">
+          <span class="pm" id="q3b_pm"></span>
+        </p>
+        <p><b>(c)</b> Factorise: <b id="q3c_text"></b><br>
+          Answer: <input id="q3c_ans" size="32" autocomplete="off">
+          <span class="symbar">
+            <button onclick="ins('q3c_ans','x²')">x²</button>
+            <button onclick="ins('q3c_ans','x³')">x³</button>
+            <button onclick="ins('q3c_ans','x⁴')">x⁴</button>
+            <button onclick="ins('q3c_ans','x⁵')">x⁵</button>
+            <button onclick="ins('q3c_ans','x⁶')">x⁶</button>
+            <button onclick="ins('q3c_ans','y²')">y²</button>
+            <button onclick="ins('q3c_ans','y³')">y³</button>
+            <button onclick="ins('q3c_ans','y⁴')">y⁴</button>
+            <button onclick="ins('q3c_ans','y⁵')">y⁵</button>
+            <button onclick="ins('q3c_ans','y⁶')">y⁶</button>
+          </span>
+          <span class="pm" id="q3c_pm"></span>
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- Q4 DOUBLE BRACKETS / QUADRATICS (EXPAND, FACTORISE, SOLVE) -->
+  <section id="q4" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q4. Double brackets & factorising quadratics (solve by factorising) <span class="marktag">[6 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q4res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p><b>(a)</b> Expand: <b id="q4a_text"></b><br>
+          Answer (no brackets; write the expanded expression): 
+          <input id="q4a_ans" size="30" autocomplete="off">
+          <span class="symbar"><button onclick="ins('q4a_ans','x²')">x²</button></span>
+          <span class="pm" id="q4a_pm"></span>
+        </p>
+        <p><b>(b)</b> Factorise: <b id="q4b_text"></b><br>
+          Answer (use brackets): 
+          <input id="q4b_ans" size="30" autocomplete="off">
+          <span class="pm" id="q4b_pm"></span>
+        </p>
+        <p><b>(c)</b> Hence solve <b id="q4c_text"></b>: &nbsp; x = <input id="q4c_r1" size="6"> , x = <input id="q4c_r2" size="6">
+          <span class="pm" id="q4c_pm"></span></p>
+      </div>
+    </div>
+  </section>
+  <!-- Q5 LINEAR EQUATIONS (BRACKETS & FRACTIONS WITH MATHML) -->
+  <section id="q5" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q5. Solving linear equations (with brackets / fractions) <span class="marktag">[5 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q5res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p><b>(a)</b> Solve: <b id="q5a_text"></b> → x = <input id="q5a" size="6"><span class="pm" id="q5a_pm"></span></p>
+        <p><b>(b)</b> Solve: 
+          <span id="q5b_math"></span>
+           → x = <input id="q5b" size="6"><span class="pm" id="q5b_pm"></span></p>
+      </div>
+    </div>
+  </section>
+  <!-- Q6 SIMULTANEOUS EQUATIONS -->
+  <section id="q6" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q6. Simultaneous linear equations (elimination/substitution) <span class="marktag">[6 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q6res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p><b>Solve the simultaneous equations:</b></p>
+        <p style="line-height:1.4" id="q6_stack"></p>
+        <p>Solution: x = <input id="q6_x" size="6"> , y = <input id="q6_y" size="6"><span class="pm" id="q6_pm"></span></p>
+      </div>
+    </div>
+  </section>
+  <!-- Q7 INEQUALITIES (SOLVE + DRAW NUMBER LINE) -->
+  <section id="q7" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q7. Inequalities — solve & show on a number line <span class="marktag">[5 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q7res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p>Solve: <b id="q7_text"></b></p>
+        <p>Write the solution inequality (use the buttons if helpful): 
+          <input id="q7_ans" size="28" autocomplete="off">
+          <span class="symbar">
+            <button onclick="ins('q7_ans',' ≤ ')">≤</button>
+            <button onclick="ins('q7_ans',' < ')">&lt;</button>
+            <button onclick="ins('q7_ans',' ≥ ')">≥</button>
+            <button onclick="ins('q7_ans',' > ')">&gt;</button>
+          </span>
+          <span class="pm" id="q7_pm1"></span>
+        </p>
+        <div class="muted">Drag both ends for two‑sided. For one‑sided: <b>drag the circle</b> to set the boundary, then <b>drag the arrow</b> to flip left/right.</div>
+        <div class="svgwrap" aria-label="Number line: drag endpoints; tap endpoint to toggle open/closed">
+          <!-- Spread-out number line: scale = 20 px per unit, domain −15..15 -->
+          <svg id="q7svg" viewBox="-340 -50 680 100" width="720" height="120">
+            <defs>
+              <!-- Arrowheads (now 2× bigger than before) -->
+              <marker id="arrowR" viewBox="0 0 14 14" refX="14" refY="7" markerWidth="28" markerHeight="28" markerUnits="userSpaceOnUse">
+                <path d="M0,0 L14,7 L0,14 Z" fill="#2563eb"/>
+              </marker>
+              <marker id="arrowL" viewBox="0 0 14 14" refX="0" refY="7" markerWidth="28" markerHeight="28" markerUnits="userSpaceOnUse">
+                <path d="M14,0 L0,7 L14,14 Z" fill="#2563eb"/>
+              </marker>
+            </defs>
+            <rect x="-340" y="-50" width="680" height="100" fill="#fff" pointer-events="none"/>
+            <line x1="-300" y1="0" x2="300" y2="0" stroke="#334155" stroke-width="2" pointer-events="none"/>
+            <g id="q7ticks" pointer-events="none"></g>
+            <g id="q7labels" pointer-events="none"></g>
+            <!-- two-sided segment -->
+            <line id="q7seg" x1="0" y1="0" x2="0" y2="0" stroke="#2563eb" stroke-width="6" stroke-linecap="round" pointer-events="none" visibility="hidden"/>
+            <circle id="q7L" r="7" cy="0" cx="-60" fill="#fff" stroke="#2563eb" stroke-width="2" class="drag-handle"/>
+            <circle id="q7R" r="7" cy="0" cx="60"  fill="#fff" stroke="#2563eb" stroke-width="2" class="drag-handle"/>
+            <!-- one-sided ray -->
+            <line id="q7ray" x1="0" y1="0" x2="0" y2="0" stroke="#2563eb" stroke-width="6" stroke-linecap="round" visibility="hidden" style="cursor:grab"/>
+            <circle id="q7B" r="7" cy="0" cx="0" fill="#fff" stroke="#2563eb" stroke-width="2" class="drag-handle" visibility="hidden"/>
+          </svg>
+        </div>
+        <span class="pm" id="q7_pm2"></span>
+      </div>
+    </div>
+  </section>
+  <!-- Q8 SEQUENCES -->
+  <section id="q8" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q8. Sequences — first four terms & the nth term <span class="marktag">[5 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q8res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p><b>(a)</b> The <b>nth term</b> of a sequence is <b id="q8a_rule"></b>. Write down the first four terms.</p>
+        <p>
+          <input id="q8a_t1" size="4"> , <input id="q8a_t2" size="4"> , <input id="q8a_t3" size="4"> , <input id="q8a_t4" size="4">
+          <span class="pm" id="q8a_pm"></span>
+        </p>
+        <p><b>(b)</b> The sequence is <b id="q8b_seq"></b>. Write the <b>nth term</b> as an expression in <b>n</b>:</p>
+        <p>
+          <input id="q8b_ans" size="20" autocomplete="off">
+          <span class="pm" id="q8b_pm"></span>
+        </p>
+      </div>
+    </div>
+  </section>
+  <!-- Q9 SUBSTITUTION -->
+  <section id="q9" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <div class="flex">
+          <h3>Q9. Substitution into expressions/formulae <span class="marktag">[4 marks]</span></h3>
+          <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        </div>
+        <div class="align-right"><span id="q9res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p><b>(a)</b> Evaluate <b id="q9a_text"></b> for <b id="q9a_vals"></b> → <input id="q9a" size="8"><span class="pm" id="q9a_pm"></span></p>
+        <p><b>(b)</b> Evaluate <b id="q9b_text"></b> for <b id="q9b_vals"></b> → <input id="q9b" size="8"><span class="pm" id="q9b_pm"></span></p>
+      </div>
+    </div>
+  </section>
+  <!-- Q10 GRAPHS — TABLE + DRAGGABLE PLOTTING -->
+  <section id="q10" class="page" role="tabpanel">
+    <div class="qpanel">
+      <div class="qhead">
+        <h3>Q10. Graphs — Complete table & plot for <span id="q10_title" style="white-space:nowrap"></span> <span class="badge">[6 marks]</span></h3>
+        <img class="nocalc" src="https://www.pemtutoring.co.uk/wp-content/uploads/2023/07/No-calc-symbol.png" alt="Non-calculator">
+        <div class="align-right"><span id="q10res" class="score"></span></div>
+      </div>
+      <div class="qbody">
+        <p>Complete the table for <b id="q10_eqn"></b>, then unlock plotting and drag the 5 points to the correct coordinates.</p>
+        <table style="max-width:440px">
+          <thead><tr><th>x</th><th id="q10x0">−2</th><th id="q10x1">−1</th><th id="q10x2">0</th><th id="q10x3">1</th><th id="q10x4">2</th></tr></thead>
+          <tbody><tr><th>y</th>
+            <td><input id="q10t0" size="4"></td>
+            <td><input id="q10t1" size="4"></td>
+            <td><input id="q10t2" size="4"></td>
+            <td><input id="q10t3" size="4"></td>
+            <td><input id="q10t4" size="4"></td>
+          </tr></tbody>
+        </table>
+        <div class="actions" style="margin-top:.6rem">
+          <button class="primary" id="q10unlock">Unlock plotting</button>
+        </div>
+        <div class="svgwrap">
+          <!-- Robust edges: extra padding in viewBox; grid is exactly −10..10, 1 unit = 20px -->
+          <svg id="q10svg" viewBox="-220 -220 440 440" width="520" height="520">
+            <defs>
+              <pattern id="g10" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M20 0 L0 0 0 20" fill="none" stroke="#6b7280" stroke-width="1"/>
+              </pattern>
+            </defs>
+            <!-- grid area -->
+            <rect x="-200" y="-200" width="400" height="400" fill="url(#g10)"/>
+            <!-- axes -->
+            <line x1="-200" y1="0"   x2="200" y2="0"   stroke="#000000" stroke-width="1.5"/>
+            <line x1="0"    y1="-200" x2="0"   y2="200" stroke="#000000" stroke-width="1.5"/>
+            <!-- tick labels -->
+            <g id="q10ticks" pointer-events="none"></g>
+            <g id="q10labels" pointer-events="none"></g>
+            <!-- axis labels -->
+            <text id="q10xlab" class="axis-label" x="188" y="-8">x</text>
+            <text id="q10ylab" class="axis-label" x="-8" y="-188" text-anchor="end">y</text>
+            <!-- draggable points -->
+            <g id="q10_pts"></g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- RESULTS -->
+  <section id="results" class="page" role="tabpanel">
+    <h2>Results</h2>
+    <div class="grid cols-2">
+      <div>
+        <h3>Your score</h3>
+        <p>Name: <span id="nameDisplay" class="score">—</span></p>
+        <p><span id="totalscore" class="score">0</span> / <span id="maxtotal" class="score">49</span></p>
+        <p>Percentage: <span id="percent" class="score">0%</span></p>
+      </div>
+      <div>
+        <h3>Actions</h3>
+        <div class="actions">
+          <button id="markAllBtn" class="primary" onclick="mark_all()">Mark all questions</button>
+          <a id="videoBtn" class="btn" href="#" target="_blank" rel="noopener" style="display:none">▶︎ Watch video tutorial</a>
+        </div>
+      </div>
+    </div>
+    <h3>Question breakdown</h3>
+    <table>
+      <thead><tr><th>Question</th><th>Marks</th></tr></thead>
+      <tbody id="breakdownBody"></tbody>
+    </table>
+  </section>
+</main>
+<!-- =================== WELCOME MODAL (instructions) =================== -->
+<div id="welcomeModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+  <div class="panel">
+    <h3 id="welcomeTitle">Welcome to this GCSE Algebra quiz</h3>
+    <p class="muted">
+      Practise essential <b>Algebra</b> skills for GCSE Maths (Foundation, <b>non‑calculator</b>),
+      suitable for <b>AQA</b>, <b>Edexcel</b>, and <b>Eduqas</b>. Work through the 10 questions in order.
+      When you’re ready, click “Mark all questions” to see your score.
+    </p>
+    <div class="row">
+      <input id="nameInput" type="text" placeholder="Your name (optional)" autocomplete="off"/>
+      <button class="primary" onclick="startQuiz()">Close &amp; start</button>
+    </div>
+  </div>
+</div>
+<script>
+  // ---------- Tabs ----------
+  const tabs=[...document.querySelectorAll('#tabbar button')];
+  const pages=[...document.querySelectorAll('section.page')];
+  let currentTabId = document.querySelector('#tabbar button.active')?.dataset.target || 'q1';
+  tabs.forEach(b=>b.addEventListener('click',()=>{
+    const nextId = b.dataset.target;
+    if (typeof saveInkFor === 'function') saveInkFor(currentTabId);
+    tabs.forEach(x=>x.classList.remove('active')); b.classList.add('active');
+    pages.forEach(p=>p.classList.remove('active'));
+    document.getElementById(nextId).classList.add('active');
+    localStorage.setItem('currentTab_algebraquiz', nextId);
+    currentTabId = nextId;
+    resizeInkCanvas();
+  }));
+  const last=localStorage.getItem('currentTab_algebraquiz');
+  if(last && document.getElementById(last)){
+    tabs.forEach(x=>x.classList.remove('active')); pages.forEach(p=>p.classList.remove('active'));
+    document.querySelector(`#tabbar button[data-target="${last}"]`).classList.add('active');
+    document.getElementById(last).classList.add('active');
+  }
+  currentTabId = document.querySelector('#tabbar button.active')?.dataset.target || 'q1';
+  // ---------- Welcome modal ----------
+  const wmodal = document.getElementById('welcomeModal');
+  const nameInput = document.getElementById('nameInput');
+  function showWelcome(){ wmodal.style.display='flex'; setTimeout(()=>nameInput.focus(),10); }
+  function hideWelcome(){ wmodal.style.display='none'; }
+  function startQuiz(){
+    const v=(nameInput.value||'').trim();
+    if(v) localStorage.setItem('quiz_name', v);
+    updateNameDisplay();
+    // Do NOT regenerate here — generation occurs once on initial load.
+    hideWelcome();
+  }
+  function updateNameDisplay(){
+    const el=document.getElementById('nameDisplay');
+    el.textContent = localStorage.getItem('quiz_name') || '—';
+  }
+  showWelcome();
+  updateNameDisplay();
+  // ---------- Helpers ----------
+  const asNum = v => {
+    if(v==null) return NaN;
+    const s = String(v).trim();
+    if(/^\s*-?\d+\s*\/\s*-?\d+\s*$/.test(s)){
+      const [n,d] = s.split('/').map(x=>parseFloat(x));
+      if(d===0) return NaN;
+      return n/d;
+    }
+    const t = s.replace(/[^\-0-9.]/g,'');
+    return t?parseFloat(t):NaN;
+  };
+  const R = { int:(a,b)=>Math.floor(Math.random()*(b-a+1))+a, pick:arr=>arr[Math.floor(Math.random()*arr.length)] };
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  function ins(id,ch){
+    const el=document.getElementById(id); if(!el) return;
+    const s=el.selectionStart??el.value.length, e=el.selectionEnd??el.value.length;
+    el.value=el.value.slice(0,s)+ch+el.value.slice(e);
+    el.focus(); el.setSelectionRange(s+ch.length, s+ch.length);
+  }
+  // Simple algebraic parser to test functional equality (single variable)
+  function makeEval(expr, variableName){
+    if(typeof expr!=='string') return null;
+    let s = expr.trim().toLowerCase();
+    s = s.replace(/[\u2212\u2013\u2014]/g,'-');
+    s = s.replace(/×/g,'*').replace(/·/g,'*').replace(/÷/g,'/');
+    s = s.replace(/x²/g,'x^2').replace(/n²/g,'n^2').replace(/(\d)²/g,'$1^2');
+    s = s.replace(/\^/g,'**');
+    s = s.replace(/(\d)(x|n)/g,'$1*$2');
+    s = s.replace(/(\d)\s*\(/g,'$1*(');
+    s = s.replace(/\)\s*(\d|x|n)/g,')*$1');
+    s = s.replace(/(x|n)\s*\(/g,'$1*(');
+    const allowed = variableName==='n' ? /^[0-9n+\-*/().\s]*$/ : /^[0-9x+\-*/().\s]*$/;
+    if(!allowed.test(s)) return null;
+    try{
+      const fn = new Function(variableName, 'return ('+s+');');
+      void fn(0);
+      return fn;
+    }catch(e){ return null; }
+  }
+  function equalExprToFunc(userExpr, targetFn, xs=[-5,-3,-1,1,2,3,4], variable='x'){
+    const f = makeEval(userExpr, variable);
+    if(!f) return false;
+    try{
+      for(const t of xs){
+        const a = f(t);
+        const b = targetFn(t);
+        if(!Number.isFinite(a) || Math.abs(a - b) > 1e-9) return false;
+      }
+      return true;
+    }catch(e){ return false; }
+  }
+  // Two-variable parser for Q3(c)
+  function makeEval2(expr){
+    if(typeof expr!=='string') return null;
+    let s = expr.trim().toLowerCase();
+    const supMap = {'²':'^2','³':'^3','⁴':'^4','⁵':'^5','⁶':'^6'};
+    s = s.replace(/[²³⁴⁵⁶]/g, m=>supMap[m]);
+    s = s.replace(/\^/g,'**');
+    s = s.replace(/×/g,'*').replace(/·/g,'*').replace(/÷/g,'/');
+    // implicit multiplication
+    s = s.replace(/(\d)([xy])/g,'$1*$2');
+    s = s.replace(/([xy])(\d)/g,'$1*$2');
+    s = s.replace(/([xy])([xy])/g,'$1*$2');
+    s = s.replace(/([0-9xy])\s*\(/g,'$1*(');
+    s = s.replace(/\)\s*([0-9xy])/g,')*$1');
+    const allowed = /^[0-9xy+\-*/().\s]*$/;
+    if(!allowed.test(s)) return null;
+    try{
+      const fn = new Function('x','y','return ('+s+');');
+      void fn(1,1);
+      return fn;
+    }catch(e){ return null; }
+  }
+  function equalExpr2(userExpr, targetFn, pts=[[ -3,-2 ],[ -2,1 ],[ -1,2 ],[ 1,1 ],[ 2,3 ]]){
+    const f = makeEval2(userExpr);
+    if(!f) return false;
+    try{
+      for(const [x,y] of pts){
+        const a = f(x,y);
+        const b = targetFn(x,y);
+        if(!Number.isFinite(a) || Math.abs(a - b) > 1e-8) return false;
+      }
+      return true;
+    }catch(e){ return false; }
+  }
+  // Pretty printers (hide coeff 1 or −1)
+  // FIX: termVar must include magnitude on the first term when negative (e.g. -20x), not collapse to "-x".
+  function termVar(c, v='x', first=false){
+    if(c===0) return first? '0' : '';
+    const abs = Math.abs(c);
+    const coeff = abs===1 ? '' : String(abs);
+    if(first){
+      const sign = c<0 ? '-' : '';
+      return sign + coeff + v;
+    }else{
+      return (c>0 ? ' + ' : ' - ') + coeff + v;
+    }
+  }
+  function termConst(n, first=false){
+    if(n===0) return first? '0' : '';
+    return (first? (n<0?'-':'') : (n>0?' + ':' - ')) + String(Math.abs(n));
+  }
+  function poly_x2_Bx_C(B,C){
+    const bStr = B===0 ? '' : (B>0? ' + ' : ' - ') + (Math.abs(B)===1? 'x' : (Math.abs(B)+'x'));
+    const cStr = C===0 ? '' : (C>0? ' + '+C : ' - '+Math.abs(C));
+    return 'x²' + bStr + cStr;
+  }
+  const SUP = {2:'²',3:'³',4:'⁴',5:'⁵',6:'⁶'};
+  function powStr(v, p){
+    if(p===0) return '';
+    if(p===1) return v;
+    return v + (SUP[p]||('^'+p));
+  }
+  // ---------- YouTube link ----------
+  const YT_URL = 'https://www.youtube.com/watch?v=YOUR_VIDEO_ID';
+  const ANS  = {};
+  // ====== GENERATORS ======
+  function generateAll(){
+    document.querySelectorAll('input,select,textarea').forEach(el=>{ el.disabled=false; el.value=''; });
+    const markBtn = document.getElementById('markAllBtn'); if(markBtn){ markBtn.disabled=false; markBtn.textContent='Mark all questions'; }
+    const vbtn=document.getElementById('videoBtn'); if(vbtn){ vbtn.style.display='none'; vbtn.href='#'; }
+    clearPM();
+    genQ1(); genQ2(); genQ3(); genQ4(); genQ5();
+    genQ6(); genQ7(); genQ8(); genQ9(); genQ10();
+    const maxTotal=qMax.reduce((a,b)=>a+b,0); const mt=document.getElementById('maxtotal'); if(mt) mt.textContent=maxTotal;
+    resetPlotQ10();
+    initNumberLineQ7(); // ticks/labels
+  }
+  function setPM(id, ok){
+    const el=document.getElementById(id); if(!el) return;
+    el.textContent = ok ? '✓' : '✗';
+    el.className = 'pm ' + (ok ? 'ok' : 'no');
+    el.style.display='inline';
+  }
+  function clearPM(){ document.querySelectorAll('.pm').forEach(el=>{ el.textContent=''; el.className='pm'; el.style.display='none'; }); }
+  // ---------- Q1 Simplify ----------
+  function q1_makeExpr_noCoeff1(){
+    const pickCoeff = ()=> R.pick([2,3,4,5,6]) * R.pick([1,-1]);
+    const pickConst = ()=> { let v=R.int(-9,9); while(v===0) v=R.int(-9,9); return v; };
+    let coeffs, consts, k, c;
+    do{
+      coeffs=[pickCoeff(), pickCoeff(), pickCoeff()];
+      consts=[pickConst(), pickConst()];
+      k = coeffs.reduce((A,B)=>A+B,0);
+      c = consts.reduce((A,B)=>A+B,0);
+    }while(k===0 || c===0);
+    const p = [
+      termVar(coeffs[0],'x',true),
+      termConst(consts[0]),
+      termVar(coeffs[1],'x'),
+      termConst(consts[1]),
+      termVar(coeffs[2],'x')
+    ].join('').replace(/\s+/g,' ').trim();
+    return {disp:p, k, c};
+  }
+  function q1_makeBracketExpr_noCoeff1(){
+    const pickNZ = ()=> { let v=R.int(-6,6); while(v===0) v=R.int(-6,6); return v; };
+    let A=R.pick([2,3,4,5]), B=R.pick([2,3,4,5]), m=R.pick([2,3,4,5]), n=R.pick([2,3,4,5]);
+    let p=pickNZ(), q=pickNZ(), r=pickNZ();
+    let k = A*m - B*n, c = A*p - B*q + r;
+    while(k===0 || c===0){
+      A=R.pick([2,3,4,5]); B=R.pick([2,3,4,5]); m=R.pick([2,3,4,5]); n=R.pick([2,3,4,5]);
+      p=pickNZ(); q=pickNZ(); r=pickNZ();
+      k = A*m - B*n; c = A*p - B*q + r;
+    }
+    const inner1 = termVar(m,'x',true) + termConst(p);
+    const inner2 = termVar(n,'x',true) + termConst(q);
+    const disp = `${A}(${inner1}) − ${B}(${inner2}) ${c - (A*p - B*q) >=0?'+':''}${r}`;
+    return {disp, k, c};
+  }
+  function genQ1(){
+    const A = q1_makeExpr_noCoeff1();
+    document.getElementById('q1a_text').textContent = A.disp;
+    ANS.q1a = {k:A.k, c:A.c};
+    const B = q1_makeBracketExpr_noCoeff1();
+    document.getElementById('q1b_text').textContent = B.disp;
+    ANS.q1b = {k:B.k, c:B.c};
+  }
+  // ---------- Q2 Indices ----------
+  function genQ2(){
+    let p=R.int(2,5), q=R.int(1,4), r=R.int(1,3);
+    while(p+q-r<1){ p=R.int(2,5); q=R.int(1,4); r=R.int(1,3); }
+    document.getElementById('q2a_text').innerHTML = `2<sup>${p}</sup> × 2<sup>${q}</sup> × 2<sup>−${r}</sup>`;
+    const e1=p+q-r; ANS.q2a = Math.pow(2,e1);
+    let a=R.int(2,5), b=R.int(1,4), c=R.int(0,3);
+    while(a+c-b<0){ a=R.int(2,5); b=R.int(1,4); c=R.int(0,3); }
+    document.getElementById('q2b_text').innerHTML = `3<sup>${a}</sup> ÷ 3<sup>${b}</sup> × 3<sup>${c}</sup>`;
+    const e2=a+c-b; ANS.q2b = Math.pow(3,e2);
+  }
+  // ---------- Q3 Single brackets + multivariable factorising ----------
+  function genQ3(){
+    // (a) expand k(ax + n)
+    const k=R.pick([2,3,4,5]), m=R.pick([2,3,4,5]), n=R.int(-6,6);
+    const inner = termVar(m,'x',true) + termConst(n);
+    document.getElementById('q3a_text').textContent = `${k}(${inner})`;
+    ANS.q3a = {kx:k*m, c:k*n};
+    // (b) factorise gx(ax + b)
+    const g=R.pick([2,3,4,5,6]), ax=R.pick([2,3,4,5,6]), b=R.int(1,8);
+    const E = g*ax, F = g*b;
+    document.getElementById('q3b_text').textContent = `${termVar(E,'x',true)}${termConst(F)}`;
+    ANS.q3b = {E, F};
+    // (c) multivariable, exponents ≤ 4
+    const G = R.pick([2,3,4,5,6]) * R.pick([1,-1]);
+    const A = R.pick([2,3,4,5,6]) * R.pick([1,-1]);
+    const Bc = R.pick([2,3,4,5,6]) * R.pick([1,-1]);
+    let a1=R.pick([1,2]), b1=R.pick([1,2]), p1=R.pick([1,2]), q1=R.pick([1,2]);
+    while(a1+p1>4 || b1+q1>4){ a1=R.pick([1,2]); b1=R.pick([1,2]); p1=R.pick([1,2]); q1=R.pick([1,2]); }
+    const e1x=a1+p1, e1y=b1;
+    const e2x=a1,     e2y=b1+q1;
+    function monoStr(coeff, ex){
+      const parts=[];
+      if(Math.abs(coeff)!==1){ parts.push(String(coeff)); }
+      else if(coeff===-1){ parts.push('-'); }
+      parts.push(powStr('x',ex.x) || '');
+      parts.push(powStr('y',ex.y) || '');
+      return (parts.join('')).replace(/\s+/g,'').replace(/^\+/,'');
+    }
+    const t1 = monoStr(G*A, {x:e1x, y:e1y});
+    const t2Sign = (G*Bc>=0? ' + ' : ' - ');
+    const t2Body = monoStr(Math.abs(G*Bc), {x:e2x, y:e2y}).replace(/^-/, '');
+    const disp = t1 + t2Sign + t2Body;
+    document.getElementById('q3c_text').textContent = disp;
+    ANS.q3c = {
+      f: (x,y)=> (G*A*Math.pow(x,e1x)*Math.pow(y,e1y)) + (G*Bc*Math.pow(x,e2x)*Math.pow(y,e2y))
+    };
+  }
+  // ---------- Q4 Quadratics (generator unchanged) ----------
+  function genQ4(){
+    const KEY = 'q4_next_signs';            // 0: ++ , 1: -- , 2: +- , 3: -+
+    let idx = parseInt(localStorage.getItem(KEY) || '0', 10);
+    if (!Number.isFinite(idx) || idx < 0 || idx > 3) idx = 0;
+    const patterns = [
+      [ 1,  1],  // ++
+      [-1, -1],  // --
+      [ 1, -1],  // +-
+      [-1,  1],  // -+
+    ];
+    const [sgnP, sgnQ] = patterns[idx];
+    localStorage.setItem(KEY, String((idx + 1) % 4));
+    let a = R.int(1,6), b = R.int(1,6);
+    const p1 = sgnP * a;
+    const q1 = sgnQ * b;
+    const s1 = p1 >= 0 ? `+ ${p1}` : `− ${Math.abs(p1)}`;
+    const s2 = q1 >= 0 ? `+ ${q1}` : `− ${Math.abs(q1)}`;
+    document.getElementById('q4a_text').textContent = `(x ${s1})(x ${s2})`;
+    const B1 = p1 + q1, C1 = p1 * q1;
+    ANS.q4a = { B: B1, C: C1 };
+    // Parts (b) & (c): different quadratic
+    let p2, q2, B2, C2;
+    do {
+      p2 = R.int(-6,6); while (p2 === 0) p2 = R.int(-6,6);
+      q2 = R.int(-6,6); while (q2 === 0) q2 = R.int(-6,6);
+      B2 = p2 + q2;
+      C2 = p2 * q2;
+    } while (B2 === B1 && C2 === C1);
+    const polyDisp = poly_x2_Bx_C(B2, C2);
+    document.getElementById('q4b_text').textContent = polyDisp;
+    document.getElementById('q4c_text').textContent = polyDisp + ' = 0';
+    ANS.q4b = { B: B2, C: C2 };
+    ANS.q4c = { r1: -p2, r2: -q2 };
+  }
+  // ---------- Q5 Linear equations ----------
+  function genQ5(){
+    const X = R.int(-9,9);
+    const A=R.pick([2,3,4]), add=R.int(-5,5), b=R.pick([2,3,4,5,6]);
+    const c = A*(X+add) - b*X;
+    const inner = termVar(1,'x',true) + termConst(add);
+    const rhs = termVar(b,'x',true) + termConst(c);
+    document.getElementById('q5a_text').textContent = `${A}(${inner}) = ${rhs}`;
+    ANS.q5a = X;
+    const a = R.pick([2,3,4,5]);
+    const t = R.int(-6,6);
+    const d = R.int(-6,6);
+    const e = t + d;
+    const span = document.getElementById('q5b_math');
+    span.innerHTML = `<math display="inline">
+      <mfrac><mi>x</mi><mn>${a}</mn></mfrac>
+      <mo>${d>=0?'+':'−'}</mo><mn>${Math.abs(d)}</mn>
+      <mo>=</mo><mn>${e}</mn>
+    </math>`;
+    ANS.q5b = a*t;
+  }
+  // ====== Q6 fixed bank (your 50 systems) ======
+  const Q6_BANK = [
+    {a:-20,b:-1,c:-20,d:1,r1:49,r2:31},   // Q01
+    {a:-10,b:-20,c:1,d:-20,r1:50,r2:17},  // Q02
+    {a:-5,b:-15,c:-5,d:1,r1:-50,r2:46},   // Q03
+    {a:-20,b:-16,c:1,d:-16,r1:-48,r2:-48},// Q04
+    {a:-5,b:-20,c:-5,d:1,r1:5,r2:47},     // Q05
+    {a:-1,b:-10,c:1,d:-10,r1:-47,r2:-33}, // Q06
+    {a:-7,b:-2,c:-7,d:1,r1:-50,r2:-38},   // Q07
+    {a:-20,b:-20,c:1,d:-20,r1:40,r2:-23}, // Q08
+    {a:-5,b:-1,c:-5,d:1,r1:-48,r2:-42},   // Q09
+    {a:-1,b:-9,c:1,d:-9,r1:48,r2:42},     // Q10
+    {a:-5,b:-1,c:-5,d:1,r1:50,r2:40},     // Q11
+    {a:-2,b:-4,c:1,d:-4,r1:50,r2:29},     // Q12
+    {a:-5,b:-1,c:-5,d:1,r1:-49,r2:-31},   // Q13
+    {a:-11,b:-10,c:1,d:-10,r1:48,r2:-48}, // Q14
+    {a:-5,b:-5,c:-5,d:1,r1:-50,r2:-44},   // Q15
+    {a:-11,b:-5,c:1,d:-5,r1:48,r2:-48},   // Q16
+    {a:-4,b:-10,c:-4,d:1,r1:-44,r2:44},   // Q17
+    {a:-20,b:-20,c:1,d:-20,r1:40,r2:40},  // Q18
+    {a:-5,b:-20,c:-5,d:1,r1:15,r2:-48},   // Q19
+    {a:-2,b:-20,c:1,d:-20,r1:-50,r2:-35}, // Q20
+    {a:-15,b:-19,c:-15,d:1,r1:-50,r2:50}, // Q21
+    {a:-20,b:-6,c:1,d:-6,r1:-8,r2:-50},   // Q22
+    {a:-11,b:-1,c:-11,d:1,r1:-50,r2:-38}, // Q23
+    {a:-3,b:-5,c:1,d:-5,r1:49,r2:37},     // Q24
+    {a:-7,b:-20,c:-7,d:1,r1:18,r2:-45},   // Q25
+    {a:-15,b:-8,c:1,d:-8,r1:50,r2:-46},   // Q26
+    {a:-6,b:-18,c:-6,d:1,r1:48,r2:-47},   // Q27
+    {a:-12,b:-20,c:1,d:-20,r1:-44,r2:47}, // Q28
+    {a:-12,b:-20,c:-12,d:1,r1:-28,r2:-49},// Q29
+    {a:-20,b:-5,c:1,d:-5,r1:20,r2:-43},   // Q30
+    {a:-6,b:-20,c:-6,d:1,r1:-8,r2:-50},   // Q31
+    {a:-15,b:-20,c:1,d:-20,r1:-50,r2:-18},// Q32
+    {a:-12,b:-2,c:-12,d:1,r1:50,r2:47},   // Q33
+    {a:-12,b:-10,c:1,d:-10,r1:44,r2:-47}, // Q34
+    {a:-6,b:-18,c:-6,d:1,r1:-48,r2:47},   // Q35
+    {a:-20,b:-9,c:1,d:-9,r1:-15,r2:48},   // Q36
+    {a:-20,b:-8,c:-20,d:1,r1:44,r2:-28},  // Q37
+    {a:-20,b:-5,c:1,d:-5,r1:-15,r2:48},   // Q38
+    {a:-20,b:-2,c:-20,d:1,r1:-48,r2:-36}, // Q39
+    {a:-20,b:-11,c:1,d:-11,r1:-36,r2:48}, // Q40
+    {a:-6,b:-20,c:-6,d:1,r1:28,r2:49},    // Q41
+    {a:-13,b:-7,c:1,d:-7,r1:49,r2:-49},   // Q42
+    {a:-5,b:-18,c:-5,d:1,r1:-50,r2:45},   // Q43
+    {a:-20,b:-20,c:1,d:-20,r1:-20,r2:22}, // Q44
+    {a:-5,b:-1,c:-5,d:1,r1:-50,r2:-40},   // Q45
+    {a:-1,b:-5,c:1,d:-5,r1:46,r2:34},     // Q46
+    {a:-20,b:-1,c:-20,d:1,r1:48,r2:32},   // Q47
+    {a:-12,b:-20,c:1,d:-20,r1:48,r2:-4},  // Q48
+    {a:-5,b:-15,c:-5,d:1,r1:50,r2:-46},   // Q49
+    {a:-15,b:-8,c:1,d:-8,r1:-50,r2:46}    // Q50
+  ];
+  // Build validated subset: not identical LHS, det ≠ 0, integer (x,y)
+  const Q6_VALID = Q6_BANK.filter(q => {
+    if (q.a === q.c && q.b === q.d) return false;
+    const det = q.a*q.d - q.b*q.c;
+    if (det === 0) return false;
+    const xNum = q.r1*q.d - q.b*q.r2;
+    const yNum = q.a*q.r2 - q.r1*q.c;
+    return Number.isInteger(xNum / det) && Number.isInteger(yNum / det);
+  });
+  // ---------- Q6 generator (random, validated from your bank) ----------
+  function genQ6(){
+    const fallback = {a:2,b:3,c:5,d:3,r1:1,r2:4}; // x=1, y=-1 (integers)
+    const q = (Q6_VALID.length ? R.pick(Q6_VALID) : fallback);
+    const det = q.a*q.d - q.b*q.c;
+    const x = (q.r1*q.d - q.b*q.r2) / det;
+    const y = (q.a*q.r2 - q.r1*q.c) / det;
+    const line1 = `${termVar(q.a,'x',true)}${termVar(q.b,'y')} = ${q.r1}`;
+    const line2 = `${termVar(q.c,'x',true)}${termVar(q.d,'y')} = ${q.r2}`;
+    document.getElementById('q6_stack').innerHTML = `<b>${line1}</b><br><b>${line2}</b>`;
+    ANS.q6 = { x, y };
+  }
+  // ---------- Q7 Inequalities ----------
+  const NL_SCALE = 20; // 20 px per unit, domain −15..15
+  let q7State = {mode:'two', L:0,U:0,Li:true,Ui:false, dir:'right', B:0, inclusive:false};
+  function nextToggle(key, a, b){
+    const v = localStorage.getItem(key) || a;
+    const out = v===a ? a : b;
+    localStorage.setItem(key, v===a ? b : a);
+    return out;
+  }
+  function genQ7(){
+    const mode = nextToggle('q7_next_mode','two','one');
+    const flip = nextToggle('q7_next_flip','noflip','flip');
+    const willFlip = (flip==='flip');
+    const m = willFlip ? R.pick([-5,-4,-3,-2]) : R.pick([2,3,4,5]);
+    let b = R.int(-10,10); while(b===0) b=R.int(-10,10);
+    if(mode==='two'){
+      const L = R.int(-12,8);
+      const U = R.int(L+2,15);
+      const Li = R.pick([true,false]);
+      const Ui = R.pick([true,false]);
+      const low  = (m>0? m*L + b : m*U + b);
+      const high = (m>0? m*U + b : m*L + b);
+      const lSign = Li ? '≤' : '<';
+      const rSign = Ui ? '≤' : '<';
+      const mid = `${m}x ${b>=0?'+':''}${b}`;
+      document.getElementById('q7_text').textContent = `${low} ${lSign} ${mid} ${rSign} ${high}`;
+      ANS.q7 = {mode:'two', L, U, Li, Ui};
+      let sL=-5, sU=5, sLi=false, sUi=false;
+      if(sL===L && sU===U && sLi===Li && sUi===Ui){
+        sL = Math.max(-15, sL-2);
+        sU = Math.min( 15, sU+2);
+      }
+      setQ7ModeUI('two');
+      setQ7Handles(sL, sU, sLi, sUi);
+      q7State = {mode:'two', L:sL, U:sU, Li:sLi, Ui:sUi};
+    }else{
+      const dir = R.pick(['left','right']);
+      const inclusive = R.pick([true,false]);
+      const B = R.int(-14,14);
+      const k = m*B + b;
+      const needGE = (dir==='right' && m>0) || (dir==='left' && m<0);
+      const sym = inclusive ? (needGE ? '≥' : '≤') : (needGE ? '>' : '<');
+      const mid = `${m}x ${b>=0?'+':''}${b}`;
+      document.getElementById('q7_text').textContent = `${mid} ${sym} ${k}`;
+      ANS.q7 = {mode:'one', dir, B, inclusive};
+      let sB = 0, sInc = false;
+      if(sB===B && sInc===inclusive){
+        sB = Math.max(-15, Math.min(15, B + (B<=12 ? 2 : -2)));
+      }
+      setQ7ModeUI('one', dir);
+      setQ7Ray(sB, sInc, dir);
+      q7State = {mode:'one', B:sB, inclusive:sInc, dir};
+    }
+  }
+  function initNumberLineQ7(){
+    const tg=document.getElementById('q7ticks');
+    const lg=document.getElementById('q7labels');
+    tg.innerHTML=''; lg.innerHTML='';
+    for(let i=-15;i<=15;i++){
+      const x=i*NL_SCALE;
+      const line=document.createElementNS('http://www.w3.org/2000/svg','line');
+      line.setAttribute('x1',x); line.setAttribute('x2',x);
+      line.setAttribute('y1',-6); line.setAttribute('y2',6);
+      line.setAttribute('stroke','#94a3b8'); line.setAttribute('stroke-width','1');
+      tg.appendChild(line);
+      const lbl=document.createElementNS('http://www.w3.org/2000/svg','text');
+      lbl.setAttribute('x',x); lbl.setAttribute('y',22); lbl.setAttribute('text-anchor','middle');
+      lbl.setAttribute('class','numline-label');
+      lbl.textContent = i.toString();
+      lg.appendChild(lbl);
+    }
+  }
+  function setQ7ModeUI(mode, dir){
+    const seg=document.getElementById('q7seg');
+    const Lc=document.getElementById('q7L'), Rc=document.getElementById('q7R');
+    const ray=document.getElementById('q7ray');
+    const Bc=document.getElementById('q7B');
+    if(mode==='two'){
+      seg.setAttribute('visibility','visible');
+      Lc.style.display=Rc.style.display='';
+      ray.setAttribute('visibility','hidden');
+      Bc.setAttribute('visibility','hidden');
+    }else{
+      seg.setAttribute('visibility','hidden');
+      Lc.style.display=Rc.style.display='none';
+      ray.setAttribute('visibility','visible');
+      Bc.setAttribute('visibility','visible');
+      if(dir==='right'){
+        ray.setAttribute('marker-start','');
+        ray.setAttribute('marker-end','url(#arrowR)');
+      }else{
+        ray.setAttribute('marker-start','url(#arrowL)');
+        ray.setAttribute('marker-end','');
+      }
+    }
+  }
+  function setQ7Handles(L, U, Li, Ui){
+    const Lx=L*NL_SCALE, Ux=U*NL_SCALE;
+    const Lc=document.getElementById('q7L'), Rc=document.getElementById('q7R'), seg=document.getElementById('q7seg');
+    Lc.setAttribute('cx', Lx); Rc.setAttribute('cx', Ux);
+    Lc.setAttribute('fill', Li ? '#2563eb' : '#fff');
+    Rc.setAttribute('fill', Ui ? '#2563eb' : '#fff');
+    seg.setAttribute('x1', Math.min(Lx,Ux)); seg.setAttribute('x2', Math.max(Lx,Ux));
+    seg.setAttribute('visibility', (U>=L)?'visible':'hidden');
+  }
+  function setQ7Ray(B, inclusive, dir){
+    const Bx=B*NL_SCALE;
+    const ray=document.getElementById('q7ray');
+    const Bc=document.getElementById('q7B');
+    Bc.setAttribute('cx', Bx);
+    Bc.setAttribute('fill', inclusive ? '#2563eb' : '#fff');
+    if(dir==='right'){
+      ray.setAttribute('x1', Bx); ray.setAttribute('y1', 0);
+      ray.setAttribute('x2', 300); ray.setAttribute('y2', 0);
+      ray.setAttribute('marker-start','');
+      ray.setAttribute('marker-end','url(#arrowR)');
+    }else{
+      ray.setAttribute('x1', -300); ray.setAttribute('y1', 0);
+      ray.setAttribute('x2', Bx);   ray.setAttribute('y2', 0);
+      ray.setAttribute('marker-start','url(#arrowL)');
+      ray.setAttribute('marker-end','');
+    }
+  }
+  // drag logic for two-sided
+  ['q7L','q7R'].forEach(id=>{
+    const el=document.getElementById(id);
+    let dragging=false, moved=false, startX=0;
+    el.addEventListener('pointerdown',e=>{
+      dragging=true; moved=false; startX=e.clientX; el.setPointerCapture(e.pointerId);
+    });
+    window.addEventListener('pointermove',e=>{
+      if(!dragging) return;
+      if(q7State.mode!=='two') return;
+      const svg=document.getElementById('q7svg');
+      const pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+      const ctm=svg.getScreenCTM().inverse(); const p=pt.matrixTransform(ctm);
+      let nx=Math.round(p.x/NL_SCALE)*NL_SCALE; nx=clamp(nx,-15*NL_SCALE,15*NL_SCALE);
+      el.setAttribute('cx', nx);
+      moved = moved || Math.abs(e.clientX-startX) > 2;
+      const Lx = +document.getElementById('q7L').getAttribute('cx');
+      const Ux = +document.getElementById('q7R').getAttribute('cx');
+      const seg=document.getElementById('q7seg');
+      seg.setAttribute('x1', Math.min(Lx,Ux)); seg.setAttribute('x2', Math.max(Lx,Ux));
+    });
+    window.addEventListener('pointerup',e=>{
+      if(!dragging) return; dragging=false; el.releasePointerCapture(e.pointerId);
+      if(q7State.mode!=='two') return;
+      let Lx = Math.round(+document.getElementById('q7L').getAttribute('cx')/NL_SCALE);
+      let Ux = Math.round(+document.getElementById('q7R').getAttribute('cx')/NL_SCALE);
+      let Li = document.getElementById('q7L').getAttribute('fill') !== '#fff';
+      let Ui = document.getElementById('q7R').getAttribute('fill') !== '#fff';
+      if(Lx>Ux){ [Lx, Ux] = [Ux, Lx]; [Li, Ui] = [Ui, Li]; }
+      q7State = {mode:'two', L:Lx, U:Ux, Li, Ui};
+      setQ7Handles(Lx, Ux, Li, Ui);
+      if(!moved){
+        if(el.id==='q7L') q7State.Li = !q7State.Li; else q7State.Ui = !q7State.Ui;
+        setQ7Handles(q7State.L, q7State.U, q7State.Li, q7State.Ui);
+      }
+    });
+  });
+  // drag logic for one-sided (boundary circle)
+  (function(){
+    const el=document.getElementById('q7B');
+    let dragging=false, moved=false, startX=0;
+    el.addEventListener('pointerdown',e=>{
+      dragging=true; moved=false; startX=e.clientX; el.setPointerCapture(e.pointerId);
+    });
+    window.addEventListener('pointermove',e=>{
+      if(!dragging) return;
+      if(q7State.mode!=='one') return;
+      const svg=document.getElementById('q7svg');
+      const pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+      const ctm=svg.getScreenCTM().inverse(); const p=pt.matrixTransform(ctm);
+      let nx=Math.round(p.x/NL_SCALE)*NL_SCALE; nx=clamp(nx,-15*NL_SCALE,15*NL_SCALE);
+      el.setAttribute('cx', nx);
+      moved = moved || Math.abs(e.clientX-startX) > 2;
+      const B = Math.round(nx/NL_SCALE);
+      q7State.B = B;
+      setQ7Ray(B, q7State.inclusive, q7State.dir);
+    });
+    window.addEventListener('pointerup',e=>{
+      if(!dragging) return; dragging=false; el.releasePointerCapture(e.pointerId);
+      if(q7State.mode!=='one') return;
+      if(!moved){
+        q7State.inclusive = !q7State.inclusive;
+        setQ7Ray(q7State.B, q7State.inclusive, q7State.dir);
+      }
+    });
+  })();
+  // drag logic for one-sided (ray/arrow itself)
+  (function(){
+    const ray=document.getElementById('q7ray');
+    let dragging=false;
+    const DIR_THRESHOLD = 6;
+    ray.addEventListener('pointerdown',e=>{
+      if(q7State.mode!=='one') return;
+      dragging=true; ray.setPointerCapture(e.pointerId); ray.style.cursor='grabbing';
+    });
+    window.addEventListener('pointermove',e=>{
+      if(!dragging || q7State.mode!=='one') return;
+      const svg=document.getElementById('q7svg');
+      const pt=svg.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY;
+      const ctm=svg.getScreenCTM().inverse(); const p=pt.matrixTransform(ctm);
+      const Bx = q7State.B * NL_SCALE;
+      const dx = p.x - Bx;
+      let dir = q7State.dir;
+      if (dx > DIR_THRESHOLD) dir = 'right';
+      else if (dx < -DIR_THRESHOLD) dir = 'left';
+      if (dir !== q7State.dir){
+        q7State.dir = dir;
+        setQ7ModeUI('one', dir);
+        setQ7Ray(q7State.B, q7State.inclusive, dir);
+      }
+    });
+    window.addEventListener('pointerup',e=>{
+      if(!dragging) return; dragging=false; try{ ray.releasePointerCapture(e.pointerId); }catch(_){}
+      ray.style.cursor='grab';
+    });
+  })();
+  // ---------- Q8 Sequences ----------
+  function genQ8(){
+    const a=R.pick([2,3,4,5,6]), b=R.int(-6,6);
+    document.getElementById('q8a_rule').textContent = `${a}n ${b>=0?'+':''}${b}`;
+    ANS.q8a = [1,2,3,4].map(n=>a*n+b);
+    const a2=R.pick([2,3,4,5,6]), b2=R.int(-6,6);
+    const seq=[1,2,3,4,5].map(n=>a2*n+b2);
+    document.getElementById('q8b_seq').textContent = seq.slice(0,5).join(', ') + ', …';
+    ANS.q8b = {a:a2, b:b2};
+  }
+  // ---------- Q9 Substitution ----------
+  function pickNoZeroOrOne(){
+    let v=R.int(-6,6);
+    while(v===0 || Math.abs(v)===1){ v=R.int(-6,6); }
+    return v;
+  }
+  function genQ9(){
+    const xa=pickNoZeroOrOne(), ya=pickNoZeroOrOne();
+    const q9a_text=`2x² + 3y`; const valA=2*xa*xa + 3*ya;
+    document.getElementById('q9a_text').textContent=q9a_text;
+    document.getElementById('q9a_vals').textContent=`x = ${xa}, y = ${ya}`;
+    ANS.q9a = valA;
+    const a=pickNoZeroOrOne(), b=pickNoZeroOrOne();
+    const q9b_text=`ab² − 4a`; const valB=a*b*b - 4*a;
+    document.getElementById('q9b_text').textContent=q9b_text;
+    document.getElementById('q9b_vals').textContent=`a = ${a}, b = ${b}`;
+    ANS.q9b = valB;
+  }
+  // ---------- Q10 Graphs ----------
+  let q10_plotUnlocked=false;
+  const q10_xs=[-2,-1,0,1,2];
+  const G_SCALE = 20; // 1 unit = 20 px, grid −10..10
+  const Q10_Y_LABEL_X = 12;
+  const Q10_Y_LABEL_Y = -188;
+  function applyQ10YLabelPosition(){
+    const ylab = document.getElementById('q10ylab');
+    if(!ylab) return;
+    ylab.setAttribute('x', Q10_Y_LABEL_X);
+    ylab.setAttribute('y', Q10_Y_LABEL_Y);
+    ylab.setAttribute('text-anchor','start');
+  }
+  function drawQ10Labels(){
+    const tg=document.getElementById('q10ticks');
+    const lg=document.getElementById('q10labels');
+    tg.innerHTML=''; lg.innerHTML='';
+    for(let i=-10;i<=10;i++){
+      const xt=document.createElementNS('http://www.w3.org/2000/svg','line');
+      xt.setAttribute('x1', i*G_SCALE); xt.setAttribute('x2', i*G_SCALE);
+      xt.setAttribute('y1', -4); xt.setAttribute('y2', 4);
+      xt.setAttribute('stroke','#94a3b8'); xt.setAttribute('stroke-width','1');
+      tg.appendChild(xt);
+      const yt=document.createElementNS('http://www.w3.org/2000/svg','line');
+      yt.setAttribute('x1', -4); yt.setAttribute('x2', 4);
+      yt.setAttribute('y1', -i*G_SCALE); yt.setAttribute('y2', -i*G_SCALE);
+      yt.setAttribute('stroke','#94a3b8'); yt.setAttribute('stroke-width','1');
+      tg.appendChild(yt);
+      const xl=document.createElementNS('http://www.w3.org/2000/svg','text');
+      xl.setAttribute('x', i*G_SCALE); xl.setAttribute('y', 14);
+      xl.setAttribute('text-anchor','middle'); xl.setAttribute('class','axis-label');
+      xl.textContent=String(i);
+      lg.appendChild(xl);
+      const yl=document.createElementNS('http://www.w3.org/2000/svg','text');
+      yl.setAttribute('x', -8); yl.setAttribute('y', -i*G_SCALE+3);
+      yl.setAttribute('text-anchor','end'); yl.setAttribute('class','axis-label');
+      yl.textContent=String(i);
+      lg.appendChild(yl);
+    }
+  }
+  function genQ10(){
+    let m=R.pick([-5,-4,-3,-2,2,3,4,5]);
+    let c=R.int(-9,9); while(c===-1 || c===0 || c===1) c=R.int(-9,9);
+    const ok=(mm,cc)=>q10_xs.every(x=>{ const y=mm*x+cc; return y>=-10 && y<=10; });
+    while(!ok(m,c)){ m=R.pick([-5,-4,-3,-2,2,3,4,5]); c=R.int(-9,9); while(c===-1||c===0||c===1) c=R.int(-9,9); }
+    const mcText = `y = ${m}x ${c>=0?'+':''}${c}`;
+    document.getElementById('q10_title').textContent = mcText;
+    document.getElementById('q10_eqn').textContent  = mcText;
+    for(let i=0;i<5;i++) document.getElementById('q10x'+i).textContent = q10_xs[i];
+    const ys=q10_xs.map(x=>m*x+c);
+    ANS.q10 = {m,c, xs:[...q10_xs], ys};
+    for(let i=0;i<5;i++) document.getElementById('q10t'+i).value='';
+    document.getElementById('q10unlock').onclick = ()=>{
+      q10_plotUnlocked=true; setTool('none'); initPlotQ10();
+    };
+    document.getElementById('q10_pts').innerHTML='';
+    drawQ10Labels();
+    applyQ10YLabelPosition();
+  }
+  function resetPlotQ10(){ q10_plotUnlocked=false; document.getElementById('q10_pts').innerHTML=''; }
+  function initPlotQ10(){
+    const g=document.getElementById('q10_pts'); g.innerHTML='';
+    for(let i=0;i<5;i++){
+      const circ=document.createElementNS('http://www.w3.org/2000/svg','circle');
+      circ.setAttribute('r','5'); circ.setAttribute('fill','#ef4444'); circ.setAttribute('stroke','#991b1b'); circ.setAttribute('stroke-width','1.5');
+      circ.setAttribute('cx', R.int(-10,10)*G_SCALE); circ.setAttribute('cy', R.int(-10,10)*G_SCALE);
+      circ.style.cursor='grab';
+      circ.addEventListener('pointerdown', q10_onDown);
+      g.appendChild(circ);
+    }
+  }
+  function q10_onDown(e){
+    if(!q10_plotUnlocked) return;
+    const el=e.target; el.setPointerCapture(e.pointerId); el.dataset.drag='1'; el.style.cursor='grabbing';
+    const move=(ev)=>{
+      if(el.dataset.drag!=='1') return;
+      const svg=document.getElementById('q10svg');
+      const pt=svg.createSVGPoint(); pt.x=ev.clientX; pt.y=ev.clientY;
+      const ctm=svg.getScreenCTM().inverse(); const p=pt.matrixTransform(ctm);
+      let nx=Math.round(p.x/G_SCALE)*G_SCALE;
+      let ny=Math.round(p.y/G_SCALE)*G_SCALE;
+      nx=clamp(nx,-10*G_SCALE,10*G_SCALE);
+      ny=clamp(ny,-10*G_SCALE,10*G_SCALE);
+      el.setAttribute('cx',nx); el.setAttribute('cy',ny);
+    };
+    const up=(ev)=>{ el.dataset.drag='0'; el.style.cursor='grab'; el.releasePointerCapture(ev.pointerId); window.removeEventListener('pointermove',move); window.removeEventListener('pointerup',up); };
+    window.addEventListener('pointermove',move); window.addEventListener('pointerup',up);
+  }
+  function q10_getUserPoints(){
+    const cs=[...document.querySelectorAll('#q10_pts circle')];
+    // SVG y increases downward; invert y to compare with mathematical coordinates.
+    return cs.map(c=>[ Math.round(+c.getAttribute('cx')/G_SCALE), -Math.round(+c.getAttribute('cy')/G_SCALE) ]);
+  }
+  function arraysEqualAsSets(A,B){
+    if(A.length!==B.length) return false;
+    const a=A.map(p=>p.join(',')), b=B.map(p=>p.join(','));
+    a.sort(); b.sort(); for(let i=0;i<a.length;i++){ if(a[i]!==b[i]) return false; }
+    return true;
+  }
+  // ---------- Marking ----------
+  function setRes(id,got,out){
+    const el=document.getElementById(id); if(!el) return;
+    el.textContent=` ${got} / ${out}`; el.className="score " + (got===out?"result ok":(got===0?"result no":""));
+  }
+  function mark_q1(){
+    let m=0;
+    const f1 = (x)=>ANS.q1a.k*x + ANS.q1a.c;
+    const f2 = (x)=>ANS.q1b.k*x + ANS.q1b.c;
+    const Aok = equalExprToFunc(document.getElementById('q1a_ans').value, f1, [-5,-3,-1,0,2,4], 'x');
+    const Bok = equalExprToFunc(document.getElementById('q1b_ans').value, f2, [-5,-2,0,1,3], 'x');
+    if(Aok) m+=2; if(Bok) m+=2;
+    setPM('q1a_pm', Aok); setPM('q1b_pm', Bok);
+    setRes('q1res',m,4); return m;
+  }
+  function mark_q2(){
+    let m=0;
+    const aOK = asNum(q2a.value)===ANS.q2a; if(aOK) m+=2; setPM('q2a_pm', aOK);
+    const bOK = asNum(q2b.value)===ANS.q2b; if(bOK) m+=2; setPM('q2b_pm', bOK);
+    setRes('q2res',m,4); return m;
+  }
+  function mark_q3(){
+    let m=0;
+    const fA = (x)=>ANS.q3a.kx*x + ANS.q3a.c;
+    const aOK = equalExprToFunc(q3a_ans.value, fA, [-4,-1,0,2,4], 'x') && !/[()]/.test(String(q3a_ans.value));
+    if(aOK) m+=2; setPM('q3a_pm', aOK);
+    const fB = (x)=>ANS.q3b.E*x + ANS.q3b.F;
+    const txt = String(q3b_ans.value||'');
+    const hasBrackets = /\(/.test(txt) && /\)/.test(txt);
+    const bOK = hasBrackets && equalExprToFunc(txt, fB, [-4,-1,0,3,5], 'x');
+    if(bOK) m+=2; setPM('q3b_pm', bOK);
+    const sC = String(document.getElementById('q3c_ans').value||'');
+    const cOK = /[()]/.test(sC) && equalExpr2(sC, ANS.q3c.f);
+    if(cOK) m+=2; setPM('q3c_pm', cOK);
+    setRes('q3res',m,6); return m;
+  }
+  /* ===== Q4-only robust parsing/equality helpers (accept x², implicit *, '=0', unicode minus) ===== */
+  function q4_sanitise(expr){
+    let s = String(expr || '').trim().toLowerCase();
+    s = s.replace(/\s*=+\s*0\s*$/,'');                    // drop trailing "= 0"
+    s = s.replace(/[\u2212\u2012\u2013\u2014]/g,'-');     // unicode minus → hyphen
+    const supMap = {'²':'^2','³':'^3','⁴':'^4','⁵':'^5','⁶':'^6'};
+    s = s.replace(/[²³⁴⁵⁶]/g, m=>supMap[m]);              // superscripts → caret
+    s = s.replace(/×|·/g,'*').replace(/÷/g,'/');          // operators
+    s = s.replace(/\^/g,'**');                            // caret → JS power
+    // implicit multiplication:
+    s = s.replace(/(\d)(x|\()/g, '$1*$2')
+         .replace(/(x)\s*(\d|\()/g, '$1*$2')
+         .replace(/\)\s*(\d|x|\()/g, ')*$1');
+    return s;
+  }
+  function q4_makeEval(expr){
+    const s = q4_sanitise(expr);
+    const allowed = /^[0-9x+\-*/().\s]*$/;
+    if(!allowed.test(s) || !s) return null;
+    try{
+      const fn = new Function('x', 'return (' + s + ');');
+      const t = fn(0);
+      if(typeof t !== 'number' || !Number.isFinite(t)) return null;
+      return fn;
+    }catch{ return null; }
+  }
+  function q4_equalToPoly(expr, B, C){
+    const f = q4_makeEval(expr);
+    if(!f) return false;
+    const g = (x)=> x*x + B*x + C;
+    const xs = [-5,-3,-2,-1,0,1,2,3,4];
+    try{
+      for(const x of xs){
+        const a = f(x), b = g(x);
+        if(!Number.isFinite(a) || Math.abs(a-b) > 1e-9) return false;
+      }
+      return true;
+    }catch{ return false; }
+  }
+  function q4_asNum(v){
+    const s = String(v||'').replace(/[^\-0-9.]/g,'').trim();
+    if(!s) return NaN;
+    const n = parseFloat(s);
+    return Number.isFinite(n) ? n : NaN;
+  }
+  function mark_q4(){
+    let m=0;
+    // (a) must be expanded (no brackets), algebraically equal
+    const sA = String(document.getElementById('q4a_ans').value||'');
+    const aOK = !/[()]/.test(sA) && q4_equalToPoly(sA, ANS.q4a.B, ANS.q4a.C);
+    if(aOK) m+=2; setPM('q4a_pm', aOK);
+    // (b) must look factorised (has brackets or explicit *), but any equivalent product accepted; '=0' allowed
+    let sB = String(document.getElementById('q4b_ans').value||'');
+    sB = sB.replace(/\s*=+\s*0\s*$/,''); // leniency
+    const looksFactorised = /[()]/.test(sB) || /\*/.test(sB);
+    const bOK = looksFactorised && q4_equalToPoly(sB, ANS.q4b.B, ANS.q4b.C);
+    if(bOK) m+=2; setPM('q4b_pm', bOK);
+    // (c) roots in any order
+    const r1=q4_asNum(q4c_r1.value), r2=q4_asNum(q4c_r2.value);
+    const want=[ANS.q4c.r1,ANS.q4c.r2].slice().sort((a,b)=>a-b).join(',');
+    const got=[r1,r2].slice().sort((a,b)=>a-b).join(',');
+    const cOK = (got===want);
+    if(cOK) m+=2; setPM('q4c_pm', cOK);
+    setRes('q4res',m,6); return m;
+  }
+  function mark_q5(){
+    let m=0;
+    const aOK = asNum(q5a.value)===ANS.q5a; if(aOK) m+=2; setPM('q5a_pm', aOK);
+    const bOK = asNum(q5b.value)===ANS.q5b; if(bOK) m+=3; setPM('q5b_pm', bOK);
+    setRes('q5res',m,5); return m;
+  }
+  function mark_q6(){
+    let m=0;
+    const xOK = asNum(q6_x.value)===ANS.q6.x;
+    const yOK = asNum(q6_y.value)===ANS.q6.y;
+    if(xOK && yOK) m=6;
+    else if(xOK || yOK) m=3;
+    else m=0;
+    setPM('q6_pm', xOK && yOK);
+    setRes('q6res',m,6); return m;
+  }
+  function parseIneqInput(s){
+    s = String(s||'').replace(/\s+/g,' ').trim();
+    if(!s) return null;
+    s = s.replace(/<=/g,'≤').replace(/>=/g,'≥').replace(/−/g,'-');
+    let m = s.match(/^x\s*(≥|>|≤|<)\s*(-?\d+)\s*$/i);
+    if(m){
+      const rel=m[1], B=parseInt(m[2],10);
+      const dir = (rel==='≥' || rel==='>') ? 'right' : 'left';
+      const inclusive = (rel==='≥' || rel==='≤');
+      return {mode:'one', dir, B, inclusive};
+    }
+    m = s.match(/^\s*(-?\d+)\s*(≤|<)\s*x\s*(≤|<)\s*(-?\d+)\s*$/i);
+    if(m){
+      const L=parseInt(m[1],10), left=m[2], right=m[3], U=parseInt(m[4],10);
+      return {mode:'two', L, U, Li:(left==='≤'), Ui:(right==='≤')};
+    }
+    const parts = s.split(',').map(t=>t.trim()).filter(Boolean);
+    if(parts.length===2){
+      let Li=null, Ui=null, L=null, U=null;
+      for(const p of parts){
+        let q = p.match(/^x\s*(≥|>)\s*(-?\d+)$/i);
+        if(q){ L=parseInt(q[2],10); Li=(q[1]==='≥'); continue; }
+        q = p.match(/^x\s*(≤|<)\s*(-?\d+)$/i);
+        if(q){ U=parseInt(q[2],10); Ui=(q[1]==='≤'); continue; }
+        q = p.match(/^(-?\d+)\s*(≤|<)\s*x$/i);
+        if(q){ L=parseInt(q[1],10); Li=(q[2]==='≤'); continue; }
+      }
+      if(L!=null && U!=null) return {mode:'two', L,U,Li,Ui};
+    }
+    return null;
+  }
+  function mark_q7(){
+    let m=0;
+    const parsed = parseIneqInput(q7_ans.value);
+    let txtOK=false, numOK=false;
+    if(ANS.q7.mode==='two'){
+      txtOK = parsed && parsed.mode==='two'
+        && parsed.L===ANS.q7.L && parsed.U===ANS.q7.U
+        && parsed.Li===ANS.q7.Li && parsed.Ui===ANS.q7.Ui;
+      const st=q7State;
+      numOK = (st.mode==='two' && st.L===ANS.q7.L && st.U===ANS.q7.U && st.Li===ANS.q7.Li && st.Ui===ANS.q7.Ui);
+    }else{
+      txtOK = parsed && parsed.mode==='one'
+        && parsed.dir===ANS.q7.dir && parsed.B===ANS.q7.B && parsed.inclusive===ANS.q7.inclusive;
+      const st=q7State;
+      numOK = (st.mode==='one' && st.dir===ANS.q7.dir && st.B===ANS.q7.B && st.inclusive===ANS.q7.inclusive);
+    }
+    if(txtOK) m+=3;
+    if(numOK) m+=2;
+    setPM('q7_pm1', !!txtOK);
+    setPM('q7_pm2', !!numOK);
+    setRes('q7res',m,5); return m;
+  }
+  function mark_q8(){
+    let m=0;
+    const u=[asNum(q8a_t1.value),asNum(q8a_t2.value),asNum(q8a_t3.value),asNum(q8a_t4.value)];
+    const exact = u.every((v,i)=>v===ANS.q8a[i]);
+    const some  = u.filter((v,i)=>v===ANS.q8a[i]).length>=2;
+    if(exact) m+=2; else if(some) m+=1;
+    setPM('q8a_pm', exact);
+    const ans=String(q8b_ans.value||'').replace(/\s+/g,'').toLowerCase();
+    const A=ANS.q8b.a, B=ANS.q8b.b;
+    const ok = new RegExp(`^(?:${A}n\\+${B}|${A}n-${Math.abs(B)}|${B}\\+${A}n|${B}-${A}n|${A}n)$`);
+    const bOK = ok.test(ans);
+    if(bOK) m+=3;
+    setPM('q8b_pm', bOK);
+    setRes('q8res',m,5); return m;
+  }
+  function mark_q9(){
+    let m=0;
+    const aOK = asNum(q9a.value)===ANS.q9a; if(aOK) m+=2; setPM('q9a_pm', aOK);
+    const bOK = asNum(q9b.value)===ANS.q9b; if(bOK) m+=2; setPM('q9b_pm', bOK);
+    setRes('q9res',m,4); return m;
+  }
+  function mark_q10(){
+    // --- Table (3 marks): start at 3, -1 per incorrect cell; clamp to [0,3]
+    let wrongTable = 0;
+    for(let i=0;i<5;i++){
+      const v = asNum(document.getElementById('q10t'+i).value);
+      if(v !== ANS.q10.ys[i]) wrongTable++;
+    }
+    const tableMarks = Math.max(0, 3 - wrongTable);
+
+    // --- Plotting (3 marks): order-independent; start at 3, -1 per missing/incorrect point; clamp to [0,3]
+    const goal = ANS.q10.xs.map((x,i)=>[x, ANS.q10.ys[i]]);
+    let plotMarks = 0;
+    if(q10_plotUnlocked){
+      const got = q10_getUserPoints();
+      const goalSet = new Set(goal.map(p=>p.join(',')));
+      const gotSet  = new Set(got.map(p=>p.join(',')));
+      let correctUnique = 0;
+      gotSet.forEach(s => { if(goalSet.has(s)) correctUnique++; });
+      const wrong = 5 - correctUnique;
+      plotMarks = Math.max(0, 3 - wrong);
+    }
+    const m = tableMarks + plotMarks;
+    setRes('q10res',m,6);
+    return m;
+  }
+  const qMax=[4,4,6,6,5,6,5,5,4,6]; // Q3 now 6 marks
+  const qTopics=[
+    'Simplifying expressions',
+    'Laws of indices (evaluate)',
+    'Expand/factorise single brackets (+ exponents)',
+    'Double brackets & factorise; solve',
+    'Linear equations (brackets/fractions)',
+    'Simultaneous equations',
+    'Inequalities + number line',
+    'Sequences (first 4 & nth term)',
+    'Substitution',
+    'Graphs (table & plotting)'
+  ];
+  function colourClass(score, max){
+    if(max===3){ if(score>=3) return 'mark-green'; if(score===2) return 'mark-orange'; return 'mark-red'; }
+    if(max===4){ if(score===4) return 'mark-green'; if(score===3) return 'mark-orange'; return 'mark-red'; }
+    if(max===5){ if(score>=4) return 'mark-green'; if(score===3) return 'mark-orange'; return 'mark-red'; }
+    if(max===6){ if(score>=5) return 'mark-green'; if(score===3||score===4) return 'mark-orange'; return 'mark-red'; }
+    return '';
+  }
+  function renderBreakdown(scores){
+    const body=document.getElementById('breakdownBody'); body.innerHTML='';
+    scores.forEach((m,i)=>{
+      const tr=document.createElement('tr');
+      const th=document.createElement('th'); th.textContent=`Q${i+1} — ${qTopics[i]}`;
+      const td=document.createElement('td'); td.textContent=`${m} / ${qMax[i]}`;
+      td.classList.add('markcell', colourClass(m, qMax[i]));
+      tr.appendChild(th); tr.appendChild(td); body.appendChild(tr);
+    });
+  }
+  function mark_all(){
+    const scores=[
+      mark_q1(),mark_q2(),mark_q3(),mark_q4(),mark_q5(),
+      mark_q6(),mark_q7(),mark_q8(),mark_q9(),mark_q10()
+    ];
+    const total=scores.reduce((a,b)=>a+b,0);
+    const maxTotal=qMax.reduce((a,b)=>a+b,0);
+    document.getElementById('totalscore').textContent=total;
+    document.getElementById('maxtotal').textContent=maxTotal;
+    const percent = Math.round((total/maxTotal)*100);
+    document.getElementById('percent').textContent = percent + '%';
+    renderBreakdown(scores);
+    const vbtn=document.getElementById('videoBtn');
+    if(vbtn){
+      vbtn.href = YT_URL;
+      vbtn.style.display='inline-block';
+    }
+    document.querySelectorAll('input,select,textarea').forEach(el=>el.disabled=true);
+    const btn=document.getElementById('markAllBtn'); if(btn){ btn.disabled=true; btn.textContent='Marked'; }
+    document.querySelector('#tabbar button[data-target="results"]').click();
+    return total;
+  }
+  // ---------- Restrictions + Fullscreen hotkeys ----------
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  document.addEventListener('keydown', function(e){
+    const key = (e.key || '').toLowerCase();
+    // CTRL+F → enter fullscreen
+    if (e.ctrlKey && key === 'f') {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen?.().catch(()=>{});
+      }
+      return;
+    }
+    // ESC → exit fullscreen
+    if (key === 'escape' && document.fullscreenElement) {
+      e.preventDefault();
+      e.stopPropagation();
+      document.exitFullscreen?.().catch(()=>{});
+      return;
+    }
+    // Block view-source and copy as before
+    if (e.ctrlKey && (key === 'u' || key === 'c')) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  });
+  // ---------- Drawing layer: fixed, DPI‑correct ----------
+  const penBtn    = document.getElementById('penBtn');
+  const eraserBtn = document.getElementById('eraserBtn');
+  const inkCanvas = document.getElementById('inkCanvas');
+  const ctx       = inkCanvas.getContext('2d');
+  const headerEl  = document.querySelector('header');
+  const PEN_WIDTH    = 3;
+  const ERASER_WIDTH = 24;
+  const PEN_COLOR    = '#000';
+  let toolMode = 'none';
+  let drawing  = false, lastX = 0, lastY = 0;
+  let dpr      = window.devicePixelRatio || 1;
+  let paintedTabId = null;
+  const INK_BY_TAB = new Map();
+  const INK_DPR    = new Map();
+  function headerHeight(){ return Math.ceil(headerEl.getBoundingClientRect().height); }
+  function docSize(){
+    const de = document.documentElement, b  = document.body;
+    const w = Math.max(de.scrollWidth,  b.scrollWidth,  de.clientWidth,  window.innerWidth);
+    const h = Math.max(de.scrollHeight, b.scrollHeight, de.clientHeight, window.innerHeight);
+    return { w, h };
+  }
+  function resizeInkCanvas(){
+    const { w, h } = docSize();
+    const hH = headerHeight();
+    if (paintedTabId) saveInkFor(paintedTabId);
+    inkCanvas.style.top    = hH + 'px';
+    inkCanvas.style.left   = '0px';
+    inkCanvas.style.width  = w + 'px';
+    const cssHeight = Math.max(1, h - hH);
+    inkCanvas.style.height = cssHeight + 'px';
+    dpr = window.devicePixelRatio || 1;
+    inkCanvas.width  = Math.floor(w * dpr);
+    inkCanvas.height = Math.floor(cssHeight * dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    loadInkFor(currentTabId);
+    paintedTabId = currentTabId;
+  }
+  function getStoreCanvas(id){
+    let off = INK_BY_TAB.get(id);
+    if (!off) {
+      off = document.createElement('canvas');
+      off.width  = inkCanvas.width;
+      off.height = inkCanvas.height;
+      INK_BY_TAB.set(id, off);
+    }
+    if (off.width < inkCanvas.width || off.height < inkCanvas.height){
+      const grown = document.createElement('canvas');
+      grown.width  = Math.max(off.width,  inkCanvas.width);
+      grown.height = Math.max(off.height, inkCanvas.height);
+      const gctx = grown.getContext('2d');
+      gctx.drawImage(off, 0, 0);
+      off = grown;
+      INK_BY_TAB.set(id, off);
+    }
+    return off;
+  }
+  function saveInkFor(id){
+    if (!id) return;
+    const off  = getStoreCanvas(id);
+    const octx = off.getContext('2d');
+    const w = Math.min(off.width,  inkCanvas.width);
+    const h = Math.min(off.height, inkCanvas.height);
+    octx.clearRect(0,0,w,h);
+    octx.drawImage(inkCanvas, 0,0, w,h, 0,0, w,h);
+    INK_DPR.set(id, dpr);
+  }
+  function loadInkFor(id){
+    ctx.clearRect(0,0, inkCanvas.width / dpr, inkCanvas.height / dpr);
+    const off = INK_BY_TAB.get(id);
+    if (off){
+      const savedDpr = INK_DPR.get(id) || 1;
+      const destWcss = off.width  / savedDpr;
+      const destHcss = off.height / savedDpr;
+      ctx.drawImage(off, 0,0, off.width, off.height, 0,0, destWcss, destHcss);
+    }
+  }
+  function pos(e){
+    const r = inkCanvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  }
+  function begin(e){
+    if (toolMode==='none') return;
+    drawing = true;
+    inkCanvas.setPointerCapture(e.pointerId);
+    const p = pos(e);
+    lastX = p.x; lastY = p.y;
+    e.preventDefault();
+  }
+  function draw(e){
+    if (!drawing || toolMode==='none') return;
+    const p = pos(e);
+    ctx.lineCap='round'; ctx.lineJoin='round';
+    ctx.globalCompositeOperation = (toolMode==='pen') ? 'source-over' : 'destination-out';
+    ctx.strokeStyle = PEN_COLOR;
+    ctx.lineWidth   = (toolMode==='pen') ? PEN_WIDTH : ERASER_WIDTH;
+    ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke();
+    lastX = p.x; lastY = p.y;
+    e.preventDefault();
+  }
+  function end(e){
+    if (!drawing) return;
+    drawing = false;
+    if (inkCanvas.hasPointerCapture(e.pointerId)) inkCanvas.releasePointerCapture(e.pointerId);
+    if (currentTabId) saveInkFor(currentTabId);
+    paintedTabId = currentTabId;
+    e.preventDefault();
+  }
+  inkCanvas.addEventListener('pointerdown',  begin);
+  inkCanvas.addEventListener('pointermove',  draw);
+  inkCanvas.addEventListener('pointerup',    end);
+  inkCanvas.addEventListener('pointercancel',end);
+  inkCanvas.addEventListener('pointerleave', end);
+  function setTool(next){
+    if (next === toolMode || next === 'none'){
+      toolMode = 'none';
+      document.body.classList.remove('pen-active','eraser-active');
+      if (penBtn)    penBtn.classList.remove('active');
+      if (eraserBtn) eraserBtn.classList.remove('active');
+      inkCanvas.classList.remove('active');
+      return;
+    }
+    toolMode = next;
+    document.body.classList.toggle('pen-active',    toolMode==='pen');
+    document.body.classList.toggle('eraser-active', toolMode==='eraser');
+    if (penBtn)    penBtn.classList.toggle('active',    toolMode==='pen');
+    if (eraserBtn) eraserBtn.classList.toggle('active', toolMode==='eraser');
+    inkCanvas.classList.add('active');
+  }
+  if (penBtn)    penBtn.addEventListener('click',   ()=> setTool('pen'));
+  if (eraserBtn) eraserBtn.addEventListener('click',()=> setTool('eraser'));
+  window.addEventListener('resize', resizeInkCanvas);
+  new ResizeObserver(()=>resizeInkCanvas()).observe(document.documentElement);
+  // ====== Initial paint + generate ======
+  resizeInkCanvas();
+  generateAll(); // generate once on load
+</script>
+</body>
+</html>
+
